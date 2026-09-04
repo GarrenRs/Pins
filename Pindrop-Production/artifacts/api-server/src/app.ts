@@ -6,6 +6,11 @@ import { logger } from "./lib/logger";
 
 const app: Express = express();
 
+// Vercel supplies the client address in X-Forwarded-For. Trust exactly its
+// immediate proxy so Express' req.ip (used by the in-memory rate limiter)
+// represents that client, without enabling proxy trust for local deployments.
+if (process.env.VERCEL) app.set("trust proxy", 1);
+
 app.use(
   pinoHttp({
     logger,

@@ -1,8 +1,8 @@
 /**
  * SEO configuration for Pindrop.
- * Update SITE_URL to your production domain before deploying.
+ * VITE_SITE_URL must be set to the final HTTPS site origin for a production build.
  */
-export const SITE_URL = 'https://pindrop.app';
+export const SITE_URL = (import.meta.env.VITE_SITE_URL as string | undefined) ?? 'https://example.com';
 export const SITE_NAME = 'Pindrop';
 
 export interface PageMeta {
@@ -36,7 +36,7 @@ export const PAGE_META = {
   pinterestVideoDownloader: {
     title: buildTitle('Online Pinterest Video Downloader - Save 1080p MP4 Videos'),
     description:
-      'Download Pinterest videos online directly in your browser. Extracts original 1080p and 720p MP4 files from public Pins without compression or third-party apps.',
+      'Download available MP4 video streams from public Pinterest Pins in your browser. Pindrop relays the selected Pinterest CDN stream without re-encoding it.',
     canonical: canonical('/pinterest-video-downloader'),
     breadcrumbs: [
       { name: 'Home', url: '/' },

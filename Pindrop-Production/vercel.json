@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "framework": "vite",
+  "buildCommand": "pnpm run build",
+  "outputDirectory": "artifacts/pinterest-video-downloader/dist/public",
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

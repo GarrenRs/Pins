@@ -3,46 +3,46 @@
 
   <!-- Homepage: primary intent — Pinterest video downloader -->
   <url>
-    <loc>https://pindrop.app/</loc>
+    <loc>https://example.com/</loc>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
 
   <!-- Tool page: variant search intent for the core downloader -->
   <url>
-    <loc>https://pindrop.app/pinterest-video-downloader</loc>
+    <loc>https://example.com/pinterest-video-downloader</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <!-- Informational: how-to guide -->
   <url>
-    <loc>https://pindrop.app/how-to-download-pinterest-videos</loc>
+    <loc>https://example.com/how-to-download-pinterest-videos</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- Trust pages -->
   <url>
-    <loc>https://pindrop.app/about</loc>
+    <loc>https://example.com/about</loc>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>https://pindrop.app/contact</loc>
+    <loc>https://example.com/contact</loc>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
 
   <url>
-    <loc>https://pindrop.app/privacy</loc>
+    <loc>https://example.com/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
 
   <url>
-    <loc>https://pindrop.app/terms</loc>
+    <loc>https://example.com/terms</loc>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>

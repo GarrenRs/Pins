@@ -9,4 +9,6 @@ Disallow: /api/resolve
 # Block result/session pages
 Disallow: /download/
 
-Sitemap: https://pindrop.app/sitemap.xml
+# Before production, replace example.com in this file and sitemap.xml with the
+# exact canonical HTTPS origin used for the VITE_SITE_URL build variable.
+Sitemap: https://example.com/sitemap.xml

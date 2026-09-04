@@ -50,12 +50,12 @@ const TECHNICAL_FAQS = [
   {
     question: 'Does Pindrop re-encode or compress downloaded Pinterest videos?',
     answer:
-      "No. Pindrop retrieves the exact video stream delivered by Pinterest's CDN servers without applying any re-compression, transcoding, or downscaling. If the creator uploaded a 1080p source, you receive the uncompressed 1080p MP4 directly.",
+      "No. Pindrop relays the selected video stream delivered by Pinterest's CDN without re-encoding, transcoding, or downscaling it. The available resolution and encoding are determined by Pinterest, not by Pindrop.",
   },
   {
     question: 'How does Pindrop ensure the audio track is included in the MP4?',
     answer:
-      "Some social media platforms separate video and audio streams. Pinterest video Pins that feature audio typically provide multiplexed MP4 containers. Pindrop's ranking engine prioritizes complete audio-visual MP4 streams over muted variants so you always get sound when it was present in the original Pin.",
+      "Pindrop selects a playable MP4 candidate when Pinterest provides one. It does not inspect audio tracks, so audio availability depends on the stream Pinterest exposes for that Pin.",
   },
   {
     question: 'Why do Pindrop download tokens expire after 15 minutes?',
@@ -65,7 +65,7 @@ const TECHNICAL_FAQS = [
   {
     question: 'Can I download 4K or 60fps Pinterest Pins?',
     answer:
-      "Videos can only be downloaded at the maximum resolution rendered by Pinterest's ingestion pipeline (typically 1080p Full HD or 720p HD at 30fps). Pindrop displays the exact resolution and file size in the preview before you download so you know precisely what format is available.",
+      "Pindrop can download only the MP4 or HLS streams Pinterest makes available for a public Pin. The resolver reports dimensions when Pinterest exposes them; it does not guarantee a particular resolution or frame rate.",
   },
   {
     question: 'Are private boards or secret Pins supported by this online tool?',
@@ -293,7 +293,7 @@ export default function PinterestVideoDownloaderPage() {
               Online Pinterest Video <span className="display-serif italic font-normal text-primary">Downloader</span>
             </h1>
             <p className="mt-4 max-w-2xl text-sm sm:text-base leading-7 text-muted-foreground">
-              Extract and download MP4 video files directly from public Pinterest Pins in full resolution. Our online tool queries Pinterest's CDN in real time to provide clean, uncompressed video streams with original audio tracks.
+              Find and download MP4 video streams from public Pinterest Pins when Pinterest makes them available. Pindrop queries Pinterest's CDN in real time and relays the selected stream without re-encoding it.
             </p>
           </header>
 
@@ -313,8 +313,8 @@ export default function PinterestVideoDownloaderPage() {
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <SpecCard
                 icon={<FileVideo2 className="h-4 w-4" />}
-                title="1080p & 720p MP4"
-                description="Pinterest encodes videos in standard H.264/MP4 profiles. Pindrop identifies the highest bitrate profile available and streams it directly to your device."
+                title="Available MP4 streams"
+                description="Pindrop prefers MP4 candidates and selects the highest reported dimensions among validated candidates. The formats and dimensions available depend on Pinterest."
               />
               <SpecCard
                 icon={<SlidersHorizontal className="h-4 w-4" />}
@@ -323,8 +323,8 @@ export default function PinterestVideoDownloaderPage() {
               />
               <SpecCard
                 icon={<Layers className="h-4 w-4" />}
-                title="Synchronized Audio"
-                description="Our candidate ranking engine strictly checks audio track availability, ensuring you receive videos with fully synchronized sound rather than muted visual tracks."
+                title="Source-dependent audio"
+                description="Pindrop relays the candidate returned by Pinterest. It does not inspect or modify audio tracks, so audio availability depends on the selected source."
               />
             </div>
           </section>
@@ -342,7 +342,7 @@ export default function PinterestVideoDownloaderPage() {
                 {
                   type: 'Canonical Desktop Pins',
                   syntax: 'https://www.pinterest.com/pin/{pin_id}/',
-                  note: 'Direct Pin identifier, quickest resolution time (~1.2s)',
+                  note: 'Direct Pin identifier',
                 },
                 {
                   type: 'Mobile App Shortlinks',
@@ -357,7 +357,7 @@ export default function PinterestVideoDownloaderPage() {
                 {
                   type: 'Mobile Query Strings',
                   syntax: '.../pin/{id}/?invite_code=...&sender=...',
-                  note: 'Tracking parameters are stripped cleanly prior to resolution',
+                  note: 'Known tracking parameters are removed before resolution',
                 },
               ].map(({ type, syntax, note }) => (
                 <div key={type} className="rounded-[12px] border border-border/70 bg-background p-3 sm:p-4">
@@ -418,7 +418,7 @@ export default function PinterestVideoDownloaderPage() {
                   <h3 className="text-sm font-bold text-foreground">Rate Limiting Safeguards</h3>
                 </div>
                 <p className="text-xs text-muted-foreground leading-5">
-                  Pindrop enforces an in-memory limit of 10 requests per minute per IP to maintain service stability and prevent abuse. Normal browsing and downloads are never impacted.
+                  Pindrop enforces an in-memory limit of 10 resolve requests per minute per IP. This limit is per running instance, so it is not a distributed abuse-control system.
                 </p>
               </div>
             </div>

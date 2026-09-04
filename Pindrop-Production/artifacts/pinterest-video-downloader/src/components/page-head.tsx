@@ -8,7 +8,7 @@
  * References:
  * - https://react.dev/blog/2024/12/05/react-19#support-for-metadata-tags
  */
-import { SITE_NAME } from '@/lib/seo';
+import { SITE_NAME, SITE_URL } from '@/lib/seo';
 
 export interface BreadcrumbItem {
   readonly name: string;
@@ -39,7 +39,7 @@ export function PageHead({ title, description, canonical, noindex = false, bread
             '@type': 'ListItem',
             position: index + 1,
             name: crumb.name,
-            item: `https://pindrop.app${crumb.url}`,
+            item: `${SITE_URL}${crumb.url}`,
           })),
         })
       : null;
@@ -69,7 +69,7 @@ export function PageHead({ title, description, canonical, noindex = false, bread
     isPartOf: {
       '@type': 'WebSite',
       name: SITE_NAME,
-      url: 'https://pindrop.app',
+      url: SITE_URL,
     },
   });
 
