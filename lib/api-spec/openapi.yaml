@@ -10,6 +10,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: pinterest
+    description: Public Pinterest video resolution and download operations
 paths:
   /healthz:
     get:
@@ -24,6 +26,79 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /resolve:
+    post:
+      operationId: resolvePinterestPin
+      tags: [pinterest]
+      summary: Resolve a Pinterest Pin video
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResolveInput"
+      responses:
+        "200":
+          description: Resolved video metadata
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResolveResponse"
+        "400":
+          description: Invalid Pinterest URL
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Pin could not be resolved or has no video
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "429":
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /download/{token}:
+    get:
+      operationId: downloadPinterestVideo
+      tags: [pinterest]
+      summary: Stream a resolver-issued Pinterest video download
+      parameters:
+        - name: token
+          in: path
+          required: true
+          schema:
+            type: string
+            minLength: 20
+            maxLength: 128
+      responses:
+        "200":
+          description: Video stream
+          content:
+            video/mp4:
+              schema:
+                type: string
+                format: binary
+            application/vnd.apple.mpegurl:
+              schema:
+                type: string
+                format: binary
+        "404":
+          description: Expired or invalid download token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "502":
+          description: Upstream video unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +108,73 @@ components:
           type: string
       required:
         - status
+    ResolveInput:
+      type: object
+      additionalProperties: false
+      required:
+        - url
+      properties:
+        url:
+          type: string
+          minLength: 1
+          maxLength: 2048
+    Pin:
+      type: object
+      properties:
+        id:
+          type: ["string", "null"]
+        title:
+          type: ["string", "null"]
+    Media:
+      type: object
+      required:
+        - type
+        - format
+        - download_url
+      properties:
+        type:
+          type: string
+          enum: [video]
+        format:
+          type: string
+          enum: [mp4, m3u8]
+        quality:
+          type: ["string", "null"]
+        width:
+          type: ["number", "null"]
+        height:
+          type: ["number", "null"]
+        size:
+          type: ["number", "null"]
+        download_url:
+          type: string
+    ResolveResponse:
+      type: object
+      required:
+        - success
+        - pin
+        - media
+      properties:
+        success:
+          type: boolean
+          const: true
+        pin:
+          $ref: "#/components/schemas/Pin"
+        media:
+          $ref: "#/components/schemas/Media"
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: object
+          required:
+            - code
+            - message
+          properties:
+            code:
+              type: string
+            message:
+              type: string
 

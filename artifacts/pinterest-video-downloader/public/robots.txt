@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# Block API endpoints — not for indexing
+Disallow: /api/
+Disallow: /api/download/
+Disallow: /api/resolve
+
+# Block result/session pages
+Disallow: /download/
+
+Sitemap: https://pindrop.app/sitemap.xml
