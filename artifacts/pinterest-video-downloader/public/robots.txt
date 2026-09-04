@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Block API endpoints — not for indexing
+Disallow: /api/
+Disallow: /api/download/
+Disallow: /api/resolve
+
+# Block result/session pages
+Disallow: /download/
+
+# Before production, replace example.com in this file and sitemap.xml with the
+# exact canonical HTTPS origin used for the VITE_SITE_URL build variable.
+Sitemap: https://example.com/sitemap.xml
