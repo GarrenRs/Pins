@@ -124,17 +124,18 @@ globalThis.__dirname = __bannerPath.dirname(globalThis.__filename);
     },
   });
 
-  // esbuild does not emit TypeScript declarations. Provide one for the
-  // standalone app bundle so the tsc step Vercel runs on api/index.ts can
-  // resolve its type instead of failing with TS7016.
-  await writeFile(
-    path.resolve(distDir, "app.d.ts"),
-    `import type { Express } from "express";
+  // esbuild does not emit TypeScript declarations. Provide declarations for the
+  // standalone app bundle so any tsc step (e.g. Vercel building api/index.ts)
+  // can resolve its type instead of failing with TS7016.
+  const appDeclaration = `import type { Express } from "express";
 
 declare const app: Express;
 export default app;
-`,
-  );
+`;
+  await Promise.all([
+    writeFile(path.resolve(distDir, "app.d.ts"), appDeclaration),
+    writeFile(path.resolve(distDir, "app.d.mts"), appDeclaration),
+  ]);
 }
 
 buildAll().catch((err) => {
