@@ -9,6 +9,4 @@ Disallow: /api/resolve
 # Block result/session pages
 Disallow: /download/
 
-# Before production, replace example.com in this file and sitemap.xml with the
-# exact canonical HTTPS origin used for the VITE_SITE_URL build variable.
-Sitemap: https://example.com/sitemap.xml
+Sitemap: https://pins26.vercel.app/sitemap.xml

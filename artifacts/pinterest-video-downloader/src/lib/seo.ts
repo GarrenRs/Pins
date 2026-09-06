@@ -2,7 +2,7 @@
  * SEO configuration for Pindrop.
  * VITE_SITE_URL must be set to the final HTTPS site origin for a production build.
  */
-export const SITE_URL = (import.meta.env.VITE_SITE_URL as string | undefined) ?? 'https://example.com';
+export const SITE_URL = (import.meta.env.VITE_SITE_URL as string | undefined) ?? 'https://pins26.vercel.app';
 export const SITE_NAME = 'Pindrop';
 
 export interface PageMeta {
