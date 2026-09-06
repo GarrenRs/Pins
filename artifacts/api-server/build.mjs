@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { build as esbuild } from "esbuild";
 import esbuildPluginPino from "esbuild-plugin-pino";
-import { rm } from "node:fs/promises";
+import { rm, writeFile } from "node:fs/promises";
 
 // Plugins (e.g. 'esbuild-plugin-pino') may use `require` to resolve dependencies
 globalThis.require = createRequire(import.meta.url);
@@ -123,6 +123,18 @@ globalThis.__dirname = __bannerPath.dirname(globalThis.__filename);
     `,
     },
   });
+
+  // esbuild does not emit TypeScript declarations. Provide one for the
+  // standalone app bundle so the tsc step Vercel runs on api/index.ts can
+  // resolve its type instead of failing with TS7016.
+  await writeFile(
+    path.resolve(distDir, "app.d.ts"),
+    `import type { Express } from "express";
+
+declare const app: Express;
+export default app;
+`,
+  );
 }
 
 buildAll().catch((err) => {
